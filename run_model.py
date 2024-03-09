@@ -20,6 +20,8 @@ class runModel():
     def _get_accuracy(self, data):
         """  
         Method to compute accuracy per epoch for the training and validation data
+        NOTE: Change as needed according to dataset
+
         Args:
             - data (DataLoader): training or validation data wrapped by DataLoader
         Returns:
