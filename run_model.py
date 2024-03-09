@@ -17,10 +17,10 @@ class runModel():
         self.val_acc = []
         self.epoch_arr = []
 
-    def _get_accuracy():
+    def _get_accuracy(self):
         pass
 
-    def _get_val_loss(val, criterion):
+    def _get_val_loss(self, val, criterion):
         """  
         Method to compute validation loss per epoch
         Args:
@@ -29,13 +29,29 @@ class runModel():
         Returns:
             - val_loss (float): validation loss for the current epoch
         """
-        val_loss = 0
+        total_loss = 0.0
+
+        for i, val_dataset in enumerate(val, 0):
+            labels, features = val_dataset
+
+            # CUDA
+            if torch.cuda.is_available():
+                features = features.cuda()
+                labels = labels.cuda()
+            
+            out = self.model(features) # compute predictions
+            loss = criterion(out, labels) # get loss
+
+            # compute loss
+            total_loss += loss.item()
+        
+        # compute average loss
+        val_loss = float(total_loss) / (i + 1)
 
         return val_loss
 
     def train(self, optimizer, train, val, criterion=nn.MSELoss(),
-              epochs=10, batch_size=20, learning_rate=0.001, 
-              display_results=False) -> None:
+              epochs=10, batch_size=20, learning_rate=0.001) -> None:
         """ 
         Train method that trains the model.
         Args:
@@ -70,7 +86,7 @@ class runModel():
 
                 # forward pass, backward pass, and optimize
                 out = self.model(features)
-                loss = criterion(features, labels)
+                loss = criterion(out, labels)
                 loss.backward()
                 optimizer.step()
 
