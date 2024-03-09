@@ -17,8 +17,25 @@ class runModel():
         self.val_acc = []
         self.epoch_arr = []
 
-    def _get_accuracy(self):
-        pass
+    def _get_accuracy(self, data):
+        correct = 0
+        total = 0
+
+        for features, labels in data: # iterate over dataloader object
+
+            # CUDA
+            if torch.cuda.is_available():
+                features = features.cuda()
+                labels = labels.cuda()
+
+            output = self.model(features) # get predictinos
+
+            # select index with maximum prediction score
+            pred = output.max(1, keepdim=True)[1]
+            correct += pred.eq(labels.view_as(pred)).sum().item()
+            total += features.shape[0]
+
+        return correct / total # return accuracy
 
     def _get_val_loss(self, val, criterion):
         """  
@@ -32,7 +49,7 @@ class runModel():
         total_loss = 0.0
 
         for i, val_dataset in enumerate(val, 0):
-            labels, features = val_dataset
+            features, labels = val_dataset # Note: depends on how data is loaded in DataLoader
 
             # CUDA
             if torch.cuda.is_available():
@@ -75,7 +92,7 @@ class runModel():
             total_train_loss = 0.0
 
             for i, dataset in enumerate(train, 0): # train in batches
-                labels, features = dataset
+                features, labels = dataset # Note: depends on how data is loaded in DataLoader
 
                 # CUDA
                 if torch.cuda.is_available():
@@ -98,8 +115,8 @@ class runModel():
             self.val_loss.append(self._get_val_loss(val, criterion)) # average val loss per epoch
 
             # get training and validation accuracy per epoch and store in array
-            self.train_acc.append(self._get_accuracy(train, batch_size=batch_size))
-            self.val_acc.append(self._get_accuracy(val, batch_size=batch_size))
+            self.train_acc.append(self._get_accuracy(train))
+            self.val_acc.append(self._get_accuracy(val))
 
             self.epoch_arr.append(epoch + 1) # store current epoch + 1 for plotting
 
