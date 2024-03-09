@@ -1,13 +1,29 @@
-from utils import np, nn, torch, time
+from utils import np, nn, torch, time, optim
+from utils import Lookahead
 
 class runModel():
     """  
     Class that scafolds the training and evaluation methods and attributes
     for each test case (Test case: Adam, Test case: Lookahead(Adam)).
     """
-    def __init__(self, model, optimizer) -> None:
-        self.model = model
-        self.optimizer = optimizer
+    def __init__(self, model, optimizer, lookahead) -> None:
+        """  
+        Init method to intialized instance of runModel.
+        Args:
+            - lookahead (Boolean): True = use Lookahead; False = do not use Lookahead
+            - optimizer (pytorch optimizer): should be Adam
+            - lookahead (Boolean): True = use Lookahead; False = do not use Lookahead
+        Returns:
+            - None
+        """
+        self.model = model      
+        self.lookahead = lookahead
+
+        # setting lookahead optimizer
+        if lookahead:
+            self.optimizer = Lookahead(optimizer)
+        else:
+            self.optimizer = optimizer       
 
         # model training attributes
         self.time_elasped = 0.0
@@ -78,11 +94,10 @@ class runModel():
 
         return val_loss
 
-    def train(self, optimizer, train, val, criterion=nn.MSELoss(), epochs=10) -> None:
+    def train(self, train, val, criterion=nn.MSELoss(), epochs=10) -> None:
         """ 
         Train method that trains the model.
         Args:
-            - optimizer (pytorch optimizer): either Adam or Lookahead(Adam)
             - train (DataLoader): train data wrapped by DataLoader
             - val (DataLoader): validation data wrapped by DataLoader
             - criterion (pytorch method): loss function where default is MSE - should be changed as needed according to data
@@ -106,13 +121,13 @@ class runModel():
                     features = features.cuda()
                     labels = labels.cuda()
 
-                optimizer.zero_grad() # zero parameter gradients
+                self.optimizer.zero_grad() # zero parameter gradients
 
                 # forward pass, backward pass, and optimize
                 out = self.model(features)
                 loss = criterion(out, labels)
                 loss.backward()
-                optimizer.step()
+                self.optimizer.step()
 
                 # calculate training loss
                 total_train_loss += loss.item()

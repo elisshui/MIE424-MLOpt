@@ -9,6 +9,7 @@ import time
 import torch
 import torch.nn as nn
 from torch.optim.optimizer import Optimizer
+import torch.optim as optim
 
 # classes
 from run_model import runModel
