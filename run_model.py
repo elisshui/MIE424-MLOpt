@@ -6,22 +6,23 @@ class runModel():
     Class that scafolds the training and evaluation methods and attributes
     for each test case (Test case: Adam, Test case: Lookahead(Adam)).
     """
-    def __init__(self, model, optimizer, lookahead) -> None:
+    def __init__(self, model, optimizer, args) -> None:
         """  
         Init method to intialized instance of runModel.
         Args:
-            - lookahead (Boolean): True = use Lookahead; False = do not use Lookahead
             - optimizer (pytorch optimizer): should be Adam
-            - lookahead (Boolean): True = use Lookahead; False = do not use Lookahead
+            - args (lookaheadArgs class instance): arguments for Lookahead
         Returns:
             - None
         """
         self.model = model      
-        self.lookahead = lookahead
+        self.lookahead = args.lookahead # whether to use lookahead or not
 
-        # setting lookahead optimizer
-        if lookahead:
-            self.optimizer = Lookahead(optimizer)
+        # setting lookahead optimizer if True
+        if self.lookahead:
+            self.optimizer = Lookahead(optimizer, la_steps=args.la_steps,
+                                       la_alpha=args.la_alpha,
+                                       pullback_momentum=args.pullback_momentum)
         else:
             self.optimizer = optimizer       
 
