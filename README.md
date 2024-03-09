@@ -1,2 +1,2 @@
-# MIE424-MLOpt
-MIE424 - Optimization in Machine Learning
+## MIE424 - Optimization in Machine Learning
+Implementing the Lookahead optimizer to reproduce results in the [Lookahead Optimizer: k steps forward, 1 step back paper](https://arxiv.org/abs/1907.08610)
