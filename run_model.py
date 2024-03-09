@@ -18,6 +18,13 @@ class runModel():
         self.epoch_arr = []
 
     def _get_accuracy(self, data):
+        """  
+        Method to compute accuracy per epoch for the training and validation data
+        Args:
+            - data (DataLoader): training or validation data wrapped by DataLoader
+        Returns:
+            - curr_acc (float): training or validation accuracy for the current epoch
+        """
         correct = 0
         total = 0
 
@@ -35,7 +42,9 @@ class runModel():
             correct += pred.eq(labels.view_as(pred)).sum().item()
             total += features.shape[0]
 
-        return correct / total # return accuracy
+        curr_acc = correct / total
+
+        return curr_acc # return accuracy
 
     def _get_val_loss(self, val, criterion):
         """  
