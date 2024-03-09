@@ -14,3 +14,4 @@ import torch.optim as optim
 # classes
 from run_model import runModel
 from lookahead_pytorch import Lookahead
+from lookahead_args import lookaheadArgs
