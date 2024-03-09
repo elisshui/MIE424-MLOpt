@@ -78,8 +78,7 @@ class runModel():
 
         return val_loss
 
-    def train(self, optimizer, train, val, criterion=nn.MSELoss(),
-              epochs=10, batch_size=20, learning_rate=0.001) -> None:
+    def train(self, optimizer, train, val, criterion=nn.MSELoss(), epochs=10) -> None:
         """ 
         Train method that trains the model.
         Args:
@@ -88,9 +87,6 @@ class runModel():
             - val (DataLoader): validation data wrapped by DataLoader
             - criterion (pytorch method): loss function where default is MSE - should be changed as needed according to data
             - epochs (integer): number of training epochs to run
-            - batch_size (integer): training batch size
-            - learning_rate (float): training learning rate - defaults to 0.001
-            - display_results (Boolean): whether to call result display methods
         Returns:
             - None
         """
