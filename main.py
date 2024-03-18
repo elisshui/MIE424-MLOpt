@@ -1,9 +1,14 @@
-from utils import runModel, optim
-from utils import lookaheadArgs, runModel
+from utils import *
+import pandas as pd
+import numpy as np
+from torch.utils.data import DataLoader, TensorDataset
+from sklearn.model_selection import train_test_split
+from sklearn import preprocessing
+from model import LSTM
 
 def main():
-    """ 
-    Creates instance of model class, trains with different optimizers (Adam, Lookahead(Adam)), then displays results. 
+    """
+    Creates instance of model class, trains with different optimizers (Adam, Lookahead(Adam)), then displays results.
         - Example usage:
             model = Model()
             optimizer = optim.Adam(model.parameters())
@@ -12,7 +17,23 @@ def main():
             run_model_lookahead.train()
             run_model_lookahead.plot_loss()
     """
-    pass
+    df = pd.read_csv("training_set.csv")
+    data = torch.tensor(df.drop(columns=['filename', 'label']).values.astype(np.float32))
+    le = preprocessing.LabelEncoder()
+    label = le.fit_transform(df['label'].values)
+    label = torch.nn.functional.one_hot(torch.tensor(label))
+    train_data, val_data, train_label, val_label = train_test_split(data, label, test_size=0.2, random_state=1, shuffle=True)
+    train_dataset = TensorDataset(train_data, train_label)
+    val_dataset = TensorDataset(val_data, val_label)
+    train_loader = DataLoader(dataset=train_dataset, batch_size=64, shuffle=True)
+    val_loader = DataLoader(dataset=val_dataset, batch_size=64, shuffle=True)
+
+    model = LSTM()
+    optimizer = optim.Adam(model.parameters())
+    lookaheadArgs_1 = lookaheadArgs(lookahead=False)
+    run_model = runModel(model, optimizer, lookaheadArgs_1)
+    run_model.train(train_loader, val_loader)
+    # run_model.plot_loss()
 
 if __name__ == "__main__":
     main()

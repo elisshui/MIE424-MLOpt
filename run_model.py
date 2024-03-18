@@ -1,13 +1,13 @@
-from utils import np, nn, torch, time, optim
-from utils import Lookahead
+from utils import *
+from lookahead_pytorch import Lookahead
 
 class runModel():
-    """  
+    """
     Class that scafolds the training and evaluation methods and attributes
     for each test case (Test case: Adam, Test case: Lookahead(Adam)).
     """
     def __init__(self, model, optimizer, args) -> None:
-        """  
+        """
         Init method to intialized instance of runModel.
         Args:
             - optimizer (pytorch optimizer): should be Adam
@@ -15,7 +15,7 @@ class runModel():
         Returns:
             - None
         """
-        self.model = model      
+        self.model = model
         self.lookahead = args.lookahead # whether to use lookahead or not
 
         # setting lookahead optimizer if True
@@ -24,7 +24,7 @@ class runModel():
                                        la_alpha=args.la_alpha,
                                        pullback_momentum=args.pullback_momentum)
         else:
-            self.optimizer = optimizer       
+            self.optimizer = optimizer
 
         # model training attributes
         self.time_elasped = 0.0
@@ -35,7 +35,7 @@ class runModel():
         self.epoch_arr = []
 
     def _get_accuracy(self, data):
-        """  
+        """
         Method to compute accuracy per epoch for the training and validation data
         NOTE: Change as needed according to dataset
 
@@ -66,7 +66,7 @@ class runModel():
         return curr_acc # return accuracy
 
     def _get_val_loss(self, val, criterion):
-        """  
+        """
         Method to compute validation loss per epoch
         Args:
             - val (DataLoader): validation data wrapped by DataLoader
@@ -83,20 +83,20 @@ class runModel():
             if torch.cuda.is_available():
                 features = features.cuda()
                 labels = labels.cuda()
-            
+
             out = self.model(features) # compute predictions
             loss = criterion(out, labels) # get loss
 
             # compute loss
             total_loss += loss.item()
-        
+
         # compute average loss
         val_loss = float(total_loss) / (i + 1)
 
         return val_loss
 
     def train(self, train, val, criterion=nn.MSELoss(), epochs=10) -> None:
-        """ 
+        """
         Train method that trains the model.
         Args:
             - train (DataLoader): train data wrapped by DataLoader
@@ -116,6 +116,9 @@ class runModel():
 
             for i, dataset in enumerate(train, 0): # train in batches
                 features, labels = dataset # Note: depends on how data is loaded in DataLoader
+
+                print("features: ", features.shape)
+                print(labels.shape)
 
                 # CUDA
                 if torch.cuda.is_available():
@@ -156,9 +159,9 @@ class runModel():
         print(f'Total time elapsed: {self.elapsed_time:.3f} seconds')
 
         return
-    
+
     def plot_loss() -> None:
-        """  
+        """
         Placeholder code: to be implemented by Edward
         """
         pass

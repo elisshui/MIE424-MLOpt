@@ -3,18 +3,18 @@ import torch.nn as nn
 from torch.autograd import Variable
 
 
-class LSTM(nn.modules):
-    def __init__(self, num_classes, input_size, hidden_size, num_layers):
+class LSTM(nn.Module):
+    def __init__(self):
         super(LSTM, self).__init__()
-        self.num_classes = num_classes
-        self.num_layers = num_layers
-        self.input_size = input_size
-        self.hidden_size = hidden_size
+        self.num_classes = 8
+        self.num_layers = 1
+        self.input_size = 13
+        self.hidden_size = 400
 
-        self.lstm = nn.LSTM(input_size=input_size, hidden_size=hidden_size,
-                          num_layers=num_layers, batch_first=True)
-        self.fc_1 =  nn.Linear(hidden_size, 128)
-        self.fc_2 = nn.Linear(128, num_classes)
+        self.lstm = nn.LSTM(input_size=self.input_size, hidden_size=self.hidden_size,
+                          num_layers=self.num_layers, batch_first=True)
+        self.fc_1 =  nn.Linear(self.hidden_size, 128)
+        self.fc_2 = nn.Linear(128, self.num_classes)
         self.relu = nn.ReLU()
 
     def forward(self, x):
