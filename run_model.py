@@ -59,7 +59,7 @@ class runModel():
 
             # select index with maximum prediction score
             # pred = output.max(1, keepdim=True)[1]
-            correct += output.eq(labels.view_as(output)).sum().item()
+            correct += ((output.argmax(dim=1)) == labels.argmax(dim=1)).sum()
             total += features.shape[0]
 
         curr_acc = correct / total
