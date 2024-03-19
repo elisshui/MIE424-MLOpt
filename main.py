@@ -21,7 +21,7 @@ def main():
     data = torch.tensor(df.drop(columns=['filename', 'label']).values.astype(np.float32))
     le = preprocessing.LabelEncoder()
     label = le.fit_transform(df['label'].values)
-    label = torch.nn.functional.one_hot(torch.tensor(label))
+    label = torch.nn.functional.one_hot(torch.tensor(label.astype(np.int64)))
     train_data, val_data, train_label, val_label = train_test_split(data, label, test_size=0.2, random_state=1, shuffle=True)
     train_dataset = TensorDataset(train_data, train_label)
     val_dataset = TensorDataset(val_data, val_label)

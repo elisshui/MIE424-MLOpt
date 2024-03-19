@@ -51,14 +51,15 @@ class runModel():
 
             # CUDA
             if torch.cuda.is_available():
+                self.model.cuda()
                 features = features.cuda()
                 labels = labels.cuda()
 
             output = self.model(features) # get predictinos
 
             # select index with maximum prediction score
-            pred = output.max(1, keepdim=True)[1]
-            correct += pred.eq(labels.view_as(pred)).sum().item()
+            # pred = output.max(1, keepdim=True)[1]
+            correct += output.eq(labels.view_as(output)).sum().item()
             total += features.shape[0]
 
         curr_acc = correct / total
@@ -81,11 +82,12 @@ class runModel():
 
             # CUDA
             if torch.cuda.is_available():
+                self.model.cuda()
                 features = features.cuda()
                 labels = labels.cuda()
 
             out = self.model(features) # compute predictions
-            loss = criterion(out, labels) # get loss
+            loss = criterion(out, labels.float()) # get loss
 
             # compute loss
             total_loss += loss.item()
@@ -117,11 +119,9 @@ class runModel():
             for i, dataset in enumerate(train, 0): # train in batches
                 features, labels = dataset # Note: depends on how data is loaded in DataLoader
 
-                print("features: ", features.shape)
-                print(labels.shape)
-
                 # CUDA
                 if torch.cuda.is_available():
+                    self.model.cuda()
                     features = features.cuda()
                     labels = labels.cuda()
 
@@ -129,7 +129,7 @@ class runModel():
 
                 # forward pass, backward pass, and optimize
                 out = self.model(features)
-                loss = criterion(out, labels)
+                loss = criterion(out, labels.float())
                 loss.backward()
                 self.optimizer.step()
 
