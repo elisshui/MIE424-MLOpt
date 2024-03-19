@@ -28,17 +28,19 @@ def main():
     train_loader = DataLoader(dataset=train_dataset, batch_size=64, shuffle=True)
     val_loader = DataLoader(dataset=val_dataset, batch_size=64, shuffle=True)
 
+    #running the adam model
     model = LSTM()
     optimizer = optim.Adam(model.parameters())
     lookaheadArgs_1 = lookaheadArgs(lookahead=False)
     run_model = runModel(model, optimizer, lookaheadArgs_1)
     run_model.train(train_loader, val_loader)
-    run_model.plot_loss()
+    run_model.plot_loss() #generates graphs of both training and validation loss
     
+    #running the lookahead model
     lookaheadArgs_1 = lookaheadArgs(lookahead=True)
     run_model = runModel(model, optimizer, lookaheadArgs_1)
     run_model.train(train_loader, val_loader)
-    run_model.plot_loss()
+    run_model.plot_loss() #generates graphs of both training and validation loss
 
 if __name__ == "__main__":
     main()
