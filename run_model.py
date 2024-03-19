@@ -1,5 +1,7 @@
 from utils import *
 from lookahead_pytorch import Lookahead
+import matplotlib.pyplot as plt
+
 
 class runModel():
     """
@@ -160,8 +162,33 @@ class runModel():
 
         return
 
-    def plot_loss() -> None:
+    def plot_loss(self) -> None:
+        """
+        Plot the training loss and validation loss against the epoch in two different graphs.
+        """
+        
+        # Plot the training loss
+        plt.figure(figsize=(10, 5))
+        plt.plot(self.epoch_arr, self.train_loss, label='Training Loss')
+        plt.xlabel('Epochs')
+        plt.ylabel('Loss')
+        plt.title('Training Loss')
+        plt.legend()
+        plt.show()
+
+        # Plot the validation loss
+        plt.figure(figsize=(10, 5))
+        plt.plot(self.epoch_arr,self.val_loss, label='Validation Loss')
+        plt.xlabel('Epochs')
+        plt.ylabel('Loss')
+        plt.title('Validation Loss')
+        plt.legend()
+        plt.show()
+    
+    def plot_mem_cost() -> None:
         """
         Placeholder code: to be implemented by Edward
         """
+        
+        
         pass

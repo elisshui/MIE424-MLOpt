@@ -33,7 +33,12 @@ def main():
     lookaheadArgs_1 = lookaheadArgs(lookahead=False)
     run_model = runModel(model, optimizer, lookaheadArgs_1)
     run_model.train(train_loader, val_loader)
-    # run_model.plot_loss()
+    run_model.plot_loss()
+    
+    lookaheadArgs_1 = lookaheadArgs(lookahead=True)
+    run_model = runModel(model, optimizer, lookaheadArgs_1)
+    run_model.train(train_loader, val_loader)
+    run_model.plot_loss()
 
 if __name__ == "__main__":
     main()
