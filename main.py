@@ -38,6 +38,7 @@ def main():
     
     #running the lookahead model
     model2 = LSTM()
+    optimizer = optim.Adam(model2.parameters())
     lookaheadArgs_2 = lookaheadArgs(lookahead=True)
     run_model2 = runModel(model2, optimizer, lookaheadArgs_2)
     run_model2.train(train_loader, val_loader)
