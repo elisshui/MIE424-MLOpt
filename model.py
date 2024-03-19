@@ -9,7 +9,7 @@ class LSTM(nn.Module):
         self.num_classes = 8
         self.num_layers = 1
         self.input_size = 13
-        self.hidden_size = 4
+        self.hidden_size = 50
 
         self.lstm = nn.LSTM(input_size=self.input_size, hidden_size=self.hidden_size,
                           num_layers=self.num_layers, batch_first=True)

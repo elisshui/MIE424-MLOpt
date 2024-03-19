@@ -37,8 +37,9 @@ def main():
     run_model.plot_loss() #generates graphs of both training and validation loss
     
     #running the lookahead model
+    model2 = LSTM()
     lookaheadArgs_1 = lookaheadArgs(lookahead=True)
-    run_model = runModel(model, optimizer, lookaheadArgs_1)
+    run_model = runModel(model2, optimizer, lookaheadArgs_1)
     run_model.train(train_loader, val_loader)
     run_model.plot_loss() #generates graphs of both training and validation loss
 
