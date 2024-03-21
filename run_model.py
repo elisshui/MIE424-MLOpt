@@ -1,7 +1,7 @@
 from utils import *
 from lookahead_pytorch import Lookahead
 import matplotlib.pyplot as plt
-
+import tracemalloc
 
 class runModel():
     """
@@ -35,6 +35,7 @@ class runModel():
         self.train_acc = []
         self.val_acc = []
         self.epoch_arr = []
+        self.memory = [] #memory used per epoch
 
     def _get_accuracy(self, data):
         """
@@ -117,6 +118,8 @@ class runModel():
 
         print('Started Training')
         for epoch in range(epochs):  # loop over whole dataset
+            tracemalloc.start() #start memory tracking
+            
             total_train_loss = 0.0
 
             for i, dataset in enumerate(train, 0): # train in batches
@@ -153,7 +156,10 @@ class runModel():
             print(f'Epoch {self.epoch_arr[epoch]} | Train loss: {self.train_loss[epoch]} | \
                     Validation loss: {self.val_loss[epoch]} | Train accuracy: {self.train_acc[epoch]} | \
                     Validation accuracy: {self.val_acc[epoch]}')
-
+            
+            self.memory.append(tracemalloc.get_traced_memory()[1]) #store memory used per epoch
+            tracemalloc.stop() #stop memory tracking
+            
         print('Finished Training')
 
         # getting elasped training time
@@ -186,10 +192,19 @@ class runModel():
         plt.legend()
         plt.show()
     
-    def plot_mem_cost() -> None:
+    def plot_mem_cost(self) -> None:
         """
         Placeholder code: to be implemented by Edward
         """
+        #not sure if we actually need to implement this 
         
+        # Plot the training loss
+        plt.figure(figsize=(10, 5))
+        plt.plot(self.epoch_arr, self.memory, label='max memory')
+        plt.xlabel('Epochs')
+        plt.ylabel('Memory usage')
+        plt.title('Memory per Epoch')
+        plt.legend()
+        plt.show()
         
         pass
