@@ -186,6 +186,34 @@ class runModel():
         plt.legend()
         plt.show()
     
+    def plot_train_loss(self, model1=None):
+        # Plot the training loss
+        plt.figure(figsize=(10, 5))
+        plt.plot(self.epoch_arr, self.train_loss, label='Model 2 Training Loss')
+        
+        if model1:
+            plt.plot(model1.epoch_arr, model1.train_loss, label='Model 1 Training Loss')
+        
+        plt.xlabel('Epochs')
+        plt.ylabel('Loss')
+        plt.title('Training Loss')
+        plt.legend()
+        plt.show()
+        
+    def plot_val_loss(self, model1=None):
+        # Plot the validation loss
+        plt.figure(figsize=(10, 5))
+        plt.plot(self.epoch_arr, self.val_loss, label='Model 2 Validation Loss')
+        
+        if model1:
+            plt.plot(model1.epoch_arr, model1.val_loss, label='Model 1 Validation Loss')
+        
+        plt.xlabel('Epochs')
+        plt.ylabel('Loss')
+        plt.title('Validation Loss')
+        plt.legend()
+        plt.show()
+    
     def plot_mem_cost() -> None:
         """
         Placeholder code: to be implemented by Edward
