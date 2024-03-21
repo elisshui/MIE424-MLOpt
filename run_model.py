@@ -99,7 +99,7 @@ class runModel():
 
         return val_loss
 
-    def train(self, train, val, criterion=nn.MSELoss(), epochs=10) -> None:
+    def train(self, train, val, criterion=nn.MSELoss(), epochs=200) -> None:
         """
         Train method that trains the model.
         Args:

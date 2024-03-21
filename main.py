@@ -30,17 +30,19 @@ def main():
 
     #running the adam model
     model = LSTM()
-    optimizer = optim.Adam(model.parameters())
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
     lookaheadArgs_1 = lookaheadArgs(lookahead=False)
     run_model = runModel(model, optimizer, lookaheadArgs_1)
     run_model.train(train_loader, val_loader)
     run_model.plot_loss() #generates graphs of both training and validation loss
-    
+
     #running the lookahead model
-    lookaheadArgs_1 = lookaheadArgs(lookahead=True)
-    run_model = runModel(model, optimizer, lookaheadArgs_1)
-    run_model.train(train_loader, val_loader)
-    run_model.plot_loss() #generates graphs of both training and validation loss
+    model2 = LSTM()
+    optimizer2 = optim.Adam(model2.parameters(), lr=0.001)
+    lookaheadArgs_2 = lookaheadArgs(lookahead=True)
+    run_model2 = runModel(model2, optimizer2, lookaheadArgs_2)
+    run_model2.train(train_loader, val_loader)
+    run_model2.plot_loss() #generates graphs of both training and validation loss
 
 if __name__ == "__main__":
     main()
