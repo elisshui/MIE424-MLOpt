@@ -61,6 +61,7 @@ class runModel():
 
             # select index with maximum prediction score
             # pred = output.max(1, keepdim=True)[1]
+            #print(output)
             correct += ((output.argmax(dim=1)) == labels.argmax(dim=1)).sum()
             total += features.shape[0]
 
