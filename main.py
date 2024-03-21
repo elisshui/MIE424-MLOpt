@@ -27,6 +27,7 @@ def main():
     val_dataset = TensorDataset(val_data, val_label)
     train_loader = DataLoader(dataset=train_dataset, batch_size=64, shuffle=True)
     val_loader = DataLoader(dataset=val_dataset, batch_size=64, shuffle=True)
+   
 
     #running the adam model
     model = LSTM()
@@ -34,7 +35,8 @@ def main():
     lookaheadArgs_1 = lookaheadArgs(lookahead=False)
     run_model = runModel(model, optimizer, lookaheadArgs_1)
     run_model.train(train_loader, val_loader)
-
+    run_model.plot_mem_cost() #generates graph of memory used per epoch
+    
     #running the lookahead model
     model2 = LSTM()
     optimizer2 = optim.Adam(model2.parameters(), lr=0.001)
@@ -43,6 +45,7 @@ def main():
     run_model2.train(train_loader, val_loader)
     run_model2.plot_train_loss(run_model)
     run_model2.plot_val_loss(run_model)
-
+    run_model2.plot_mem_cost() #generates graph of memory used per epoch
+    
 if __name__ == "__main__":
     main()
