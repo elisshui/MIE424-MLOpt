@@ -35,7 +35,6 @@ def main():
     lookaheadArgs_1 = lookaheadArgs(lookahead=False)
     run_model = runModel(model, optimizer, lookaheadArgs_1)
     run_model.train(train_loader, val_loader)
-    run_model.plot_mem_cost() #generates graph of memory used per epoch
     
     #running the lookahead model
     model2 = LSTM()
@@ -45,7 +44,7 @@ def main():
     run_model2.train(train_loader, val_loader)
     run_model2.plot_train_loss(run_model)
     run_model2.plot_val_loss(run_model)
-    run_model2.plot_mem_cost() #generates graph of memory used per epoch
+    run_model2.plot_mem_cost(run_model) #generates graph of memory used per epoch
     
 if __name__ == "__main__":
     main()

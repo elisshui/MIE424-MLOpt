@@ -220,19 +220,16 @@ class runModel():
         plt.legend()
         plt.show()
     
-    def plot_mem_cost(self) -> None:
-        """
-        Placeholder code: to be implemented by Edward
-        """
-        #not sure if we actually need to implement this 
-        
-        # Plot the training loss
+    def plot_mem_cost(self, model1=None):
+        # Plot the memory cost
         plt.figure(figsize=(10, 5))
-        plt.plot(self.epoch_arr, self.memory, label='max memory')
+        plt.plot(self.epoch_arr, self.memory, label='Model 2 Memory Cost')
+        
+        if model1:
+            plt.plot(model1.epoch_arr, model1.memory, label='Model 1 Memory Cost')
+        
         plt.xlabel('Epochs')
         plt.ylabel('Memory usage')
         plt.title('Memory per Epoch')
         plt.legend()
         plt.show()
-        
-        pass
