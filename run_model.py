@@ -195,10 +195,10 @@ class runModel():
     def plot_train_loss(self, model1=None):
         # Plot the training loss
         plt.figure(figsize=(10, 5))
-        plt.plot(self.epoch_arr, self.train_loss, label='Model 2 Training Loss')
+        plt.plot(self.epoch_arr, self.train_loss, label='Lookahead Training Loss')
         
         if model1:
-            plt.plot(model1.epoch_arr, model1.train_loss, label='Model 1 Training Loss')
+            plt.plot(model1.epoch_arr, model1.train_loss, label='Adam Training Loss')
         
         plt.xlabel('Epochs')
         plt.ylabel('Loss')
@@ -209,10 +209,10 @@ class runModel():
     def plot_val_loss(self, model1=None):
         # Plot the validation loss
         plt.figure(figsize=(10, 5))
-        plt.plot(self.epoch_arr, self.val_loss, label='Model 2 Validation Loss')
+        plt.plot(self.epoch_arr, self.val_loss, label='Lookahead Validation Loss')
         
         if model1:
-            plt.plot(model1.epoch_arr, model1.val_loss, label='Model 1 Validation Loss')
+            plt.plot(model1.epoch_arr, model1.val_loss, label='Adam Validation Loss')
         
         plt.xlabel('Epochs')
         plt.ylabel('Loss')
@@ -223,10 +223,10 @@ class runModel():
     def plot_mem_cost(self, model1=None):
         # Plot the memory cost
         plt.figure(figsize=(10, 5))
-        plt.plot(self.epoch_arr, self.memory, label='Model 2 Memory Cost')
+        plt.plot(self.epoch_arr, self.memory, label='Lookahead Memory Cost')
         
         if model1:
-            plt.plot(model1.epoch_arr, model1.memory, label='Model 1 Memory Cost')
+            plt.plot(model1.epoch_arr, model1.memory, label='Adam Memory Cost')
         
         plt.xlabel('Epochs')
         plt.ylabel('Memory usage')
