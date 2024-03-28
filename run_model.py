@@ -1,7 +1,5 @@
 from utils import *
 from lookahead_pytorch import Lookahead
-import matplotlib.pyplot as plt
-import tracemalloc
 
 class runModel():
     """
@@ -35,7 +33,7 @@ class runModel():
         self.train_acc = []
         self.val_acc = []
         self.epoch_arr = []
-        self.memory = [] #memory used per epoch
+        self.memory = []  # memory used per epoch
 
     def _get_accuracy(self, data):
         """
@@ -114,16 +112,16 @@ class runModel():
         """
         torch.manual_seed(1000)
 
-        start_time = time.time() # time elapsed
+        start_time = time.time()  # time elapsed
 
         print('Started Training')
         for epoch in range(epochs):  # loop over whole dataset
-            tracemalloc.start() #start memory tracking
+            tracemalloc.start()  # start memory tracking
             
             total_train_loss = 0.0
 
-            for i, dataset in enumerate(train, 0): # train in batches
-                features, labels = dataset # Note: depends on how data is loaded in DataLoader
+            for i, dataset in enumerate(train, 0):  # train in batches
+                features, labels = dataset  # Note: depends on how data is loaded in DataLoader
 
                 # CUDA
                 if torch.cuda.is_available():
@@ -143,22 +141,22 @@ class runModel():
                 total_train_loss += loss.item()
 
             # get training and validation loss per epoch and store in array
-            self.train_loss.append(float(total_train_loss) / (i + 1)) # average training loss per epoch
-            self.val_loss.append(self._get_val_loss(val, criterion)) # average val loss per epoch
+            self.train_loss.append(float(total_train_loss) / (i + 1))  # average training loss per epoch
+            self.val_loss.append(self._get_val_loss(val, criterion))  # average val loss per epoch
 
             # get training and validation accuracy per epoch and store in array
             self.train_acc.append(self._get_accuracy(train))
             self.val_acc.append(self._get_accuracy(val))
 
-            self.epoch_arr.append(epoch + 1) # store current epoch + 1 for plotting
+            self.epoch_arr.append(epoch + 1)  # store current epoch + 1 for plotting
 
             # print training progress
             print(f'Epoch {self.epoch_arr[epoch]} | Train loss: {self.train_loss[epoch]} | \
                     Validation loss: {self.val_loss[epoch]} | Train accuracy: {self.train_acc[epoch]} | \
                     Validation accuracy: {self.val_acc[epoch]}')
             
-            self.memory.append(tracemalloc.get_traced_memory()[1]) #store memory used per epoch
-            tracemalloc.stop() #stop memory tracking
+            self.memory.append(tracemalloc.get_traced_memory()[1])  # store memory used per epoch
+            tracemalloc.stop()  # stop memory tracking
             
         print('Finished Training')
 
@@ -168,12 +166,92 @@ class runModel():
         print(f'Total time elapsed: {self.elapsed_time:.3f} seconds')
 
         return
+    
+    def save_experiement_data(self, filename):
+        """ 
+        Method to save the data stored from each experiment as a csv file.
+        Args:
+            - filename (String): the path in which the save the csv.
+        Returns: None
+        """
+        experiment_data = pd.DataFrame({'epoch': self.epoch_arr,
+                                        'train_loss': self.train_loss,
+                                        'val_loss': self.val_loss,
+                                        'train_acc': self.train_acc,
+                                        'val_acc': self.val_acc,
+                                        'memory': self.memory})
+        
+        experiment_data.to_csv(filename, index=False)
+
+        print("Experiment data saved.")
+
+    def plot_train_loss(self, *args):
+        """
+        Method to plot the training loss for all optimizers.
+        Args:
+            - Tuple with experiemnt object and label for the graph (model, "Model Training Loss")
+        Returns: None
+        """
+        plt.figure(figsize=(10, 5))
+        
+        for arg in args:
+            plt.plot(arg[0].epoch_arr, arg[0].train_loss, label=arg[1], alpha=0.5)
+        
+        plt.xlabel('Epochs')
+        plt.ylabel('Loss')
+        plt.title('Training Loss')
+        plt.legend()
+
+        plt.savefig("training_loss.png")
+
+        plt.show()
+        
+    def plot_val_loss(self, *args):
+        """
+        Method to plot the validation loss for all optimizers.
+        Args:
+            - Tuple with experiemnt object and label for the graph (model, "Model Training Loss")
+        Returns: None
+        """
+        plt.figure(figsize=(10, 5))
+        
+        for arg in args:
+            plt.plot(arg[0].epoch_arr, arg[0].train_loss, label=arg[1], alpha=0.5)
+        
+        plt.xlabel('Epochs')
+        plt.ylabel('Loss')
+        plt.title('Validation Loss')
+        plt.legend()
+
+        plt.savefig("validation_loss.png")
+
+        plt.show()
+    
+    def plot_mem_cost(self, *args):
+        """
+        Method to plot the memory usage for all optimizers.
+        Args:
+            - Tuple with experiemnt object and label for the graph (model, "Model Training Loss")
+        Returns: None
+        """
+        plt.figure(figsize=(10, 5))
+        
+        for arg in args:
+            plt.plot(arg[0].epoch_arr, arg[0].train_loss, label=arg[1], alpha=0.5)
+        
+        plt.xlabel('Epochs')
+        plt.ylabel('Memory usage')
+        plt.title('Memory per Epoch')
+        plt.legend()
+
+        plt.savefig("memory_cost.png")
+
+        plt.show()
 
     def plot_loss(self) -> None:
         """
         Plot the training loss and validation loss against the epoch in two different graphs.
         """
-        
         # Plot the training loss
         plt.figure(figsize=(10, 5))
         plt.plot(self.epoch_arr, self.train_loss, label='Training Loss')
@@ -189,47 +267,5 @@ class runModel():
         plt.xlabel('Epochs')
         plt.ylabel('Loss')
         plt.title('Validation Loss')
-        plt.legend()
-        plt.show()
-    
-    def plot_train_loss(self, model1=None):
-        # Plot the training loss
-        plt.figure(figsize=(10, 5))
-        plt.plot(self.epoch_arr, self.train_loss, label='Lookahead Training Loss')
-        
-        if model1:
-            plt.plot(model1.epoch_arr, model1.train_loss, label='Adam Training Loss')
-        
-        plt.xlabel('Epochs')
-        plt.ylabel('Loss')
-        plt.title('Training Loss')
-        plt.legend()
-        plt.show()
-        
-    def plot_val_loss(self, model1=None):
-        # Plot the validation loss
-        plt.figure(figsize=(10, 5))
-        plt.plot(self.epoch_arr, self.val_loss, label='Lookahead Validation Loss')
-        
-        if model1:
-            plt.plot(model1.epoch_arr, model1.val_loss, label='Adam Validation Loss')
-        
-        plt.xlabel('Epochs')
-        plt.ylabel('Loss')
-        plt.title('Validation Loss')
-        plt.legend()
-        plt.show()
-    
-    def plot_mem_cost(self, model1=None):
-        # Plot the memory cost
-        plt.figure(figsize=(10, 5))
-        plt.plot(self.epoch_arr, self.memory, label='Lookahead Memory Cost')
-        
-        if model1:
-            plt.plot(model1.epoch_arr, model1.memory, label='Adam Memory Cost')
-        
-        plt.xlabel('Epochs')
-        plt.ylabel('Memory usage')
-        plt.title('Memory per Epoch')
         plt.legend()
         plt.show()
