@@ -195,7 +195,7 @@ class runModel():
         plt.figure(figsize=(10, 5))
         
         for arg in args:
-            plt.plot(arg[0].epoch_arr, arg[0].train_loss, label=arg[1], alpha=0.5)
+            plt.plot(arg[0].epoch_arr, arg[0].train_loss, label=arg[1], color=arg[2], alpha=0.5)
         
         plt.xlabel('Epochs')
         plt.ylabel('Loss')
@@ -216,7 +216,7 @@ class runModel():
         plt.figure(figsize=(10, 5))
         
         for arg in args:
-            plt.plot(arg[0].epoch_arr, arg[0].train_loss, label=arg[1], alpha=0.5)
+            plt.plot(arg[0].epoch_arr, arg[0].train_loss, label=arg[1], color=arg[2], alpha=0.5)
         
         plt.xlabel('Epochs')
         plt.ylabel('Loss')
@@ -237,7 +237,7 @@ class runModel():
         plt.figure(figsize=(10, 5))
         
         for arg in args:
-            plt.plot(arg[0].epoch_arr, arg[0].train_loss, label=arg[1], alpha=0.5)
+            plt.plot(arg[0].epoch_arr, arg[0].train_loss, label=arg[1], color=arg[2], alpha=0.5)
         
         plt.xlabel('Epochs')
         plt.ylabel('Memory usage')
