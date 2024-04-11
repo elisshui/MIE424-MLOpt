@@ -12,7 +12,7 @@ def main():
             run_model_lookahead.plot_loss()
     """
     # reading the data
-    df = pd.read_csv("training_set.csv")
+    df = pd.read_csv("data/training_set.csv")
 
     # processing the data
     data = torch.tensor(df.drop(columns=['filename', 'label']).values.astype(np.float32))
