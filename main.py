@@ -40,7 +40,7 @@ def main():
 
     run_model_lh_adam = runModel(model_lh_adam, optimizer_lh_adam, lookaheadArgs_2)
     run_model_lh_adam.train(train_loader, val_loader)
-    run_model_lh_adam.save_experiement_data("results/experiment_LH_adam.csv")
+    run_model_lh_adam.save_experiement_data("results/experiment_LH.csv")
 
     # running the adam model
     model_adam = LSTM()

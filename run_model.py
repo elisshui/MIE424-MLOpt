@@ -3,8 +3,8 @@ from lookahead_pytorch import Lookahead
 
 class runModel():
     """
-    Class that scafolds the training and evaluation methods and attributes
-    for each test case (Test case: Adam, Test case: Lookahead(Adam)).
+    Class that holds the training and evaluation methods as well as
+    attributes for each experiment.
     """
     def __init__(self, model, optimizer, args) -> None:
         """
@@ -202,7 +202,7 @@ class runModel():
         plt.title('Training Loss')
         plt.legend()
 
-        plt.savefig("training_loss.png")
+        plt.savefig("results/training_loss.png")
 
         plt.show()
         
@@ -223,7 +223,7 @@ class runModel():
         plt.title('Validation Loss')
         plt.legend()
 
-        plt.savefig("validation_loss.png")
+        plt.savefig("results/validation_loss.png")
 
         plt.show()
     
@@ -244,7 +244,7 @@ class runModel():
         plt.title('Memory per Epoch')
         plt.legend()
 
-        plt.savefig("memory_cost.png")
+        plt.savefig("results/memory_cost.png")
 
         plt.show()
 
