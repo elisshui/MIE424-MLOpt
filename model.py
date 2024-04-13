@@ -16,6 +16,7 @@ class LSTM(nn.Module):
         self.fc_1 = nn.Linear(self.hidden_size, 128)
         self.fc_2 = nn.Linear(128, self.num_classes)
         self.relu = nn.ReLU()
+        self.softmax = nn.Softmax()
 
     def forward(self, x):
         x = x.view(x.size(0), 1, -1)
@@ -27,8 +28,9 @@ class LSTM(nn.Module):
 
         _, (out, __) = self.lstm(x, (h_0, c_0))
         out = out.view(-1, self.hidden_size)
-        out = self.relu(out)
+        # out = self.relu(out)
         out = self.fc_1(out)
-        out = self.relu(out)
+        # out = self.relu(out)
         out = self.fc_2(out)
+        out = self.softmax(out)
         return out

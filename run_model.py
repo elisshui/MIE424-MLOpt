@@ -15,7 +15,11 @@ class runModel():
         Returns:
             - None
         """
-        self.model = model
+
+        if torch.cuda.is_available():
+            self.model = model.cuda()
+        else:
+            self.model = model
         self.lookahead = args.lookahead # whether to use lookahead or not
 
         # setting lookahead optimizer if True
@@ -61,7 +65,7 @@ class runModel():
             # select index with maximum prediction score
             # pred = output.max(1, keepdim=True)[1]
             #print(output)
-            correct += ((output.argmax(dim=1)) == labels.argmax(dim=1)).sum()
+            correct += ((output.argmax(dim=1)) == labels.argmax(dim=1)).sum().item()
             total += features.shape[0]
 
         curr_acc = correct / total
@@ -125,7 +129,6 @@ class runModel():
 
                 # CUDA
                 if torch.cuda.is_available():
-                    self.model.cuda()
                     features = features.cuda()
                     labels = labels.cuda()
 
@@ -151,9 +154,7 @@ class runModel():
             self.epoch_arr.append(epoch + 1)  # store current epoch + 1 for plotting
 
             # print training progress
-            print(f'Epoch {self.epoch_arr[epoch]} | Train loss: {self.train_loss[epoch]} | \
-                    Validation loss: {self.val_loss[epoch]} | Train accuracy: {self.train_acc[epoch]} | \
-                    Validation accuracy: {self.val_acc[epoch]}')
+            print(f'Epoch {self.epoch_arr[epoch]} | Train loss: {self.train_loss[epoch]} | val loss: {self.val_loss[epoch]} | Train acc: {self.train_acc[epoch]} | val acc: {self.val_acc[epoch]}')
             
             self.memory.append(tracemalloc.get_traced_memory()[1])  # store memory used per epoch
             tracemalloc.stop()  # stop memory tracking
@@ -180,7 +181,7 @@ class runModel():
                                         'train_acc': self.train_acc,
                                         'val_acc': self.val_acc,
                                         'memory': self.memory})
-        
+
         experiment_data.to_csv(filename, index=False)
 
         print("Experiment data saved.")
